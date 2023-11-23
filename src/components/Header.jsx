@@ -2,10 +2,11 @@ import React from 'react'
 import warehouseImage from "../assets/images/warehouse_img.jpg"
 import SearchBox from './SearchBox'
 
-export default function Header({ viewName, productCountChip, search, path }) {
+export default function Header({ viewName, productName, productCountChip, search, path }) {
 
   let productCountChipContent = "";
   let searchContent = "";
+  let navPath = viewName;
   
   if(productCountChip) {
     productCountChipContent = 
@@ -18,6 +19,10 @@ export default function Header({ viewName, productCountChip, search, path }) {
     searchContent = <SearchBox />;
   }
 
+  if(productName) {
+    viewName = "Product";
+  }
+
 
   return (
     <>
@@ -26,7 +31,7 @@ export default function Header({ viewName, productCountChip, search, path }) {
           <div className="grid grid-cols-2">
             <section className="name-image p-5">
                 <h1 className="text-white font-bold text-2xl">
-                  {viewName} {productCountChipContent}
+                  {viewName} {} {productCountChipContent}
                 </h1>
             </section>
             <section className="right-side text-end p-5">
@@ -35,7 +40,7 @@ export default function Header({ viewName, productCountChip, search, path }) {
           </div>
           <nav className="bg-[#FDF7ED] px-5 py-1 border-b-gray-400 border nav-breadcumbs font-normal text-sm">
           <p>
-            <span>{path}</span> /<span className="active text-orange-400 font-bold ml-1">{viewName}</span></p>
+            <span>{path}</span> /<span className="active text-orange-400 font-bold ml-1">{productName}</span></p>
         </nav>
       </header>
     </>
