@@ -5,6 +5,8 @@ import logisticsImg from '../../assets/images/logisticsImg.svg'
 
 export default function LoginView() { 
 
+  // TODO: Check about React context to manage authetication
+
   const [formData, setFormData] = useState({
     username: '',
     password: '',
