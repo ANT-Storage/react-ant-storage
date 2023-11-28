@@ -5,17 +5,17 @@ export default function Table({ items }) {
     
     let tableItem =
     <>
-        <tr class="text-[#929292] border-b">
-                            <th scope="row" class="px-6 py-2 font-medium">
+        <tr className="text-[#929292] border-b">
+                            <th scope="row" className="px-6 py-2 font-medium">
                              <input type="checkbox" className="inline-block relative top-0.5 mr-1"/> SA098987SDFASF07
                             </th>
-                            <td class="px-6 py-2 font-semibold">
+                            <td className="px-6 py-2 font-semibold">
                                 Air Max 4309
                             </td>
-                            <td class="px-6 py-2">
+                            <td className="px-6 py-2">
                                 Sport Wear
                             </td>
-                            <td class="px-6 py-2">
+                            <td className="px-6 py-2">
                                 <span className="bg-white text-black border-[#F0CD97] border-2 text-xs rounded-full py-1 px-2 mr-2">
                                     Sport
                                 </span>
@@ -26,21 +26,21 @@ export default function Table({ items }) {
                                     Sport
                                 </span>
                             </td>
-                            <td class="px-6 py-2">
+                            <td className="px-6 py-2">
                                 123
                             </td>
         </tr>
-        <tr class="text-[#929292] border-b bg-[#F9F9F9]">
-                            <th scope="row" class="px-6 py-2 font-medium">
+        <tr className="text-[#929292] border-b bg-[#F9F9F9]">
+                            <th scope="row" className="px-6 py-2 font-medium">
                                 <input type="checkbox" className="inline-block relative top-0.5 mr-1"/> SA098987SDFASF07
                             </th>
-                            <td class="px-6 py-2 font-semibold">
+                            <td className="px-6 py-2 font-semibold">
                                 Air Max 4309
                             </td>
-                            <td class="px-6 py-2">
+                            <td className="px-6 py-2">
                                 Sport Wear
                             </td>
-                            <td class="px-6 py-2">
+                            <td className="px-6 py-2">
                                 <span className="bg-white text-black border-[#F0CD97] border-2 text-xs rounded-full py-1 px-2 mr-2">
                                     Sport
                                 </span>
@@ -51,7 +51,7 @@ export default function Table({ items }) {
                                     Sport
                                 </span>
                             </td>
-                            <td class="px-6 py-2">
+                            <td className="px-6 py-2">
                                 123
                             </td>
         </tr>
@@ -60,23 +60,23 @@ export default function Table({ items }) {
 
     return (
         <>
-            <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left rtl:text-right ">
-                    <thead class="text-xs font-semibold bg-[#E39945] text-white">
+            <div className="relative overflow-x-auto">
+                <table className="w-full text-sm text-left rtl:text-right ">
+                    <thead className="text-xs font-semibold bg-[#E39945] text-white">
                         <tr>
-                            <th scope="col" class="px-6 py-2">
+                            <th scope="col" className="px-6 py-2">
                                 <input type="checkbox" className="inline-block relative top-0.5 mr-1"/> ID
                             </th>
-                            <th scope="col" class="px-6 py-2">
+                            <th scope="col" className="px-6 py-2">
                                 Product Name
                             </th>
-                            <th scope="col" class="px-6 py-2">
+                            <th scope="col" className="px-6 py-2">
                                 Category
                             </th>
-                            <th scope="col" class="px-6 py-2">
+                            <th scope="col" className="px-6 py-2">
                                 Tags
                             </th>
-                            <th scope="col" class="px-6 py-2">
+                            <th scope="col" className="px-6 py-2">
                                 Stock
                             </th>
                         </tr>

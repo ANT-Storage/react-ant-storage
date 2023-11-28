@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react'
 export default function SearchBox() {
   return (
     <>
-        <div class="relative w-3/4 float-right">
+        <div className="relative w-3/4 float-right">
             <input 
                 type="text" 
                 id="search-box" 
