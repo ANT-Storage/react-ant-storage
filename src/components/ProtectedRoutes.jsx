@@ -1,14 +1,18 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom';
-import LoginView from '../views/login/LoginView';
+import React from 'react';
+import { Outlet, Navigate } from 'react-router-dom';
+import { useAuth } from '../auth/AuthContext';
 
-const useAuth = () => {
-    const user = {name: "", isAuthenticated: false}
-    return user && user.name && user.isAuthenticated;
-}
+const ProtectedRoutes = () => {
+  const { user } = useAuth();
 
-export default function ProtectedRoutes() {
-    const isAuth = useAuth();
+  // Check if the user is authenticated
+  if (!user) {
+    // If not authenticated, redirect to the login page
+    return <Navigate to="/" replace />;
+  }
 
-    return isAuth ? <Outlet/> : <LoginView/>;
-}
+  // If authenticated, render the Outlet
+  return <Outlet />;
+};
+
+export default ProtectedRoutes;

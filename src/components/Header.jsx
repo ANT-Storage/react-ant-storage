@@ -1,8 +1,12 @@
 import React from 'react'
 import warehouseImage from "../assets/images/warehouse_img.jpg"
 import SearchBox from './SearchBox'
+import { useAuth } from '../auth/AuthContext.jsx'
+import { Icon } from '@iconify/react'
 
 export default function Header({ viewName, productName, productCountChip, search, path }) {
+
+  const { user, logout } = useAuth();
 
   let productCountChipContent = "";
   let searchContent = "";
@@ -34,8 +38,17 @@ export default function Header({ viewName, productName, productCountChip, search
                   {viewName} {} {productCountChipContent}
                 </h1>
             </section>
-            <section className="right-side text-end p-5">
-              {searchContent}
+            <section className="right-side text-end p-5 grid grid-cols-5">
+              <div className="search col-span-4">
+                {searchContent}
+              </div>
+              <div className="profile px-2 py-1">
+                <p className="flex align-baseline">
+                  {user ? user.username : 'Username'}
+                  <Icon className="cursor-pointer relative top-1 ml-2" onClick={logout} icon="material-symbols:logout" />  
+                </p>         
+              </div>
+              
             </section>
           </div>
           <nav className="bg-[#FDF7ED] px-5 py-1 border-b-gray-400 border nav-breadcumbs font-normal text-sm">

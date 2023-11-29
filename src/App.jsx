@@ -5,13 +5,24 @@ import CategoriesView from "./views/categories/CategoriesView.jsx";
 import ProductView from "./views/products/ProductView.jsx";
 import { BrowserRouter as BrowserRouter, Routes, Route } from "react-router-dom";
 import ProtectedRoutes from "./components/ProtectedRoutes.jsx";
+import { useAuth } from './auth/AuthContext.jsx';
 
 
 function App() {
+  
+  const { user } = useAuth();
+
+  let rootPath = <Route path="/" element={<LoginView />} />;
+
+  if(user) {
+    rootPath = <Route path="/" element={<DashboardView />} />
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginView />} />
+        
+        {rootPath}
         <Route element={<ProtectedRoutes/>}>
           <Route path="/dashboard" element={<DashboardView />} />
           <Route path="/categories" element={<CategoriesView />} />
