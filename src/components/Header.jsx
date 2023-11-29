@@ -3,8 +3,9 @@ import warehouseImage from "../assets/images/warehouse_img.jpg"
 import SearchBox from './SearchBox'
 import { useAuth } from '../auth/AuthContext.jsx'
 import { Icon } from '@iconify/react'
+import { Link } from 'react-router-dom'
 
-export default function Header({ viewName, productName, productCountChip, search, path }) {
+export default function Header({ viewName, productName, productCount, search, path }) {
 
   const { user, logout } = useAuth();
 
@@ -12,10 +13,10 @@ export default function Header({ viewName, productName, productCountChip, search
   let searchContent = "";
   let navPath = viewName;
   
-  if(productCountChip) {
+  if(productCount > 0) {
     productCountChipContent = 
     <span className="bg-[#F0CD97] relative -top-1 text-black text-xs py-2 px-3 mx-2 rounded-full">
-      123 products
+      {productCount} products
     </span>;
   }
 
@@ -27,6 +28,29 @@ export default function Header({ viewName, productName, productCountChip, search
     viewName = "Product";
   }
 
+  function createInteractivePath(path) {
+    var views = path.split("/");
+    var currentView = path.split("/")[path.split("/").length - 1];
+
+    const viewPaths = views.map((view, index) => {
+      if(view!=currentView) {
+        view = view.replace(" ","")
+        return (
+          <Link key={index} to={`/${view}`}>
+            <span className="hover:underline">{view}</span> <span className="mx-1.5">/</span>
+          </Link>
+        );
+      }
+    });
+
+    return(
+      <>
+      {viewPaths} <span className="text-orange-400 font-bold cursor-default">{currentView}</span>
+      </>
+    )
+  }
+
+  let interctivePath = createInteractivePath(path);
 
   return (
     <>
@@ -43,7 +67,7 @@ export default function Header({ viewName, productName, productCountChip, search
                 {searchContent}
               </div>
               <div className="profile px-2 py-1">
-                <p className="flex align-baseline">
+                <p className="flex align-baseline cursor-default">
                   {user ? user.username : 'Username'}
                   <Icon className="cursor-pointer relative top-1 ml-2" onClick={logout} icon="material-symbols:logout" />  
                 </p>         
@@ -53,7 +77,8 @@ export default function Header({ viewName, productName, productCountChip, search
           </div>
           <nav className="bg-[#FDF7ED] px-5 py-1 border-b-gray-400 border nav-breadcumbs font-normal text-sm">
           <p>
-            <span>{path}</span> /<span className="active text-orange-400 font-bold ml-1">{productName}</span></p>
+            {interctivePath}
+          </p>
         </nav>
       </header>
     </>

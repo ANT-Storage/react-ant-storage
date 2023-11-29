@@ -26,7 +26,7 @@ function App() {
         <Route element={<ProtectedRoutes/>}>
           <Route path="/dashboard" element={<DashboardView />} />
           <Route path="/categories" element={<CategoriesView />} />
-          <Route path="/products" element={<ProductListView />} />
+          <Route path="/categories/:categoryName/products" element={<ProductListView />} />
           <Route path="/product" element={<ProductView />} />
         </Route>
       </Routes>
