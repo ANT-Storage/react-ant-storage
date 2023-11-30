@@ -67,7 +67,7 @@ export default function Header({ viewName, productName, productCount, search, pa
                 {searchContent}
               </div>
               <div className="profile px-2 py-1">
-                <p className="flex align-baseline cursor-default">
+                <p className="flex float-right cursor-default">
                   {user ? user.username : 'Username'}
                   <Icon className="cursor-pointer relative top-1 ml-2" onClick={logout} icon="material-symbols:logout" />  
                 </p>         
