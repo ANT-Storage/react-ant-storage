@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 export default function ProductListView() {
 
   const { categoryName } = useParams();
-  const hiddenColumns = ['id','url_img','category_id'];
+  const hiddenColumns = ['url_img','category_id'];
 
   const [category, setCategory] = useState([]);
   const [products, setProducts] = useState([]);
@@ -36,7 +36,7 @@ export default function ProductListView() {
     <div>
       <Header viewName={capitalizeFirstLetter(categoryName)} productCount={products.length} search={true} path={`Dashboard / Categories / ${capitalizeFirstLetter(categoryName)}`}/>
       <main className="relative">
-        <Table items={products} hiddenColumns={hiddenColumns}/>
+        <Table items={products} hiddenColumns={hiddenColumns} linkField={"name"}/>
       </main>
     </div>
   )
