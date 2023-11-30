@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 
+// TODO: Create a js method to make the table pagination adapt to the screen size
+
 const Table = ({ items, hiddenColumns, linkField }) => {
   const columns = items.length > 0 ? Object.keys(items[0]) : [];
   const [sortOrder, setSortOrder] = useState('asc');
