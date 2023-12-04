@@ -51,7 +51,9 @@ export default function CategoriesView() {
         <section className="grid grid-cols-4 gap-4 mx-4 mt-2">
         {filteredCategories.length > 0 ? (
             filteredCategories.map(category => (
-              <CategoryCard key={category.id} id={category.id} name={capitalizeFirstLetter(category.name)} />
+              <CategoryCard 
+                key={category.id} 
+                id={category.id}name={capitalizeFirstLetter(category.name)} />
             ))
           ) : (
             categories.map(category => (

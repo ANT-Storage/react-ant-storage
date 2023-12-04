@@ -8,6 +8,10 @@ function UsersListView() {
     const [users, setUsers] = useState([]);
     const [filteredUsers, setFilteredUsers] = useState([]);
     const hiddenColumns = ['id','password'];
+    const linkPath = [
+      "/dashboard",
+      "/users"
+    ];
 
     const handleSearch = (searchTerm, field) => {
       const filteredResults = users.filter((item) => {
@@ -44,10 +48,13 @@ function UsersListView() {
           search={true}
           searchField={'username'}
           onSearch={handleSearch} 
-          path={`Dashboard / Users`}/>
+          visualPath={`Dashboard / Users`}
+          linkPath={linkPath}
+        />
         <main className="relative">
             <Table 
               items={filteredUsers.length > 0 ? filteredUsers : users}
+              objectName={"user"}
               hiddenColumns={hiddenColumns}
               linkField={'username'}
               linkFieldEnabled={true}

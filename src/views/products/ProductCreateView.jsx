@@ -119,7 +119,7 @@ export default function ProductCreateView() {
               type="file"
               name="file"
               id=""
-              ref={fileInputRef} // Attach the ref to the file input
+              ref={fileInputRef}
               onChange={(e) => handleInputChange("file", e.target.files[0])}
             />
           </div>

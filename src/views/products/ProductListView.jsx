@@ -81,6 +81,7 @@ export default function ProductListView() {
       <main className="relative">
         <Table
           items={filteredProducts.length > 0 ? filteredProducts : products}
+          objectName={"products"}
           hiddenColumns={hiddenColumns}
           linkField={'name'}
           linkFieldEnabled={true}

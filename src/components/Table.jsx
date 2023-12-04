@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
 import SearchBox from './SearchBox';
 
-const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
+const Table = ({ items, objectName, hiddenColumns, linkField, linkFieldEnabled }) => {
   const columns = items.length > 0 ? Object.keys(items[0]) : [];
   const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -120,7 +120,7 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
           <Link to={getCreatePath()}>
             <button className="bg-[#E39945] flex align-baseline rounded text-white text-sm py-1.5 px-3">
             <Icon icon="gridicons:add-outline" width="18" height="18" className="relative mr-1" />
-              Add product
+              New {objectName}
             </button>
           </Link>
         </div>
