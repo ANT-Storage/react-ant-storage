@@ -5,7 +5,7 @@ import { useAuth } from '../auth/AuthContext.jsx'
 import { Icon } from '@iconify/react'
 import { Link } from 'react-router-dom'
 
-export default function Header({ viewName, productName, productCount, search, onSearch, searchField, path}) {
+export default function Header({ viewName, productName, productCount, search, onSearch, searchField, visualPath, linkPath}) {
 
   const { user, logout } = useAuth();
 
@@ -29,29 +29,18 @@ export default function Header({ viewName, productName, productCount, search, on
     viewName = "Product";
   }
 
-  function createInteractivePath(path) {
-    var views = path.split("/");
-    var currentView = path.split("/")[path.split("/").length - 1];
-
-    const viewPaths = views.map((view, index) => {
-      if(view!=currentView) {
-        view = view.replace(" ","")
-        return (
-          <Link key={index} to={`/${view}`}>
-            <span className="hover:underline">{view}</span> <span className="mx-1.5">/</span>
-          </Link>
-        );
-      }
-    });
-
-    return(
-      <>
-      {viewPaths} <span className="text-orange-400 font-bold cursor-default">{currentView}</span>
-      </>
-    )
+  function generateBreadcrumbs() {
+    const breadcrumbCount = visualPath.split(' / ').length;
+  
+    return visualPath.split(' / ').map((path, index) => (
+      <React.Fragment key={index}>
+        <Link to={linkPath[index]} className={`hover:underline${index === breadcrumbCount - 1 ? ' text-orange-400 font-bold' : ''}`}>
+          {path}
+        </Link>
+        {index < breadcrumbCount - 1 && <span className="mx-1.5">/</span>}
+      </React.Fragment>
+    ));
   }
-
-  let interctivePath = createInteractivePath(path);
 
   return (
     <>
@@ -78,7 +67,7 @@ export default function Header({ viewName, productName, productCount, search, on
           </div>
           <nav className="bg-[#FDF7ED] px-5 py-1 border-b-gray-400 border nav-breadcumbs font-normal text-sm">
           <p>
-            {interctivePath}
+            {generateBreadcrumbs()}
           </p>
         </nav>
       </header>

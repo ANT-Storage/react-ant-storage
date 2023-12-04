@@ -9,6 +9,12 @@ export default function ProductView() {
     const { productId, categoryId } = useParams();
     const [category, setCategory] = useState('');
     const [product, setProduct] = useState('');
+    const linkPath = [
+        "/dashboard",
+        "/categories",
+        `/categories/${categoryId}/products`,
+        `/categories/${categoryId}/products/${productId}`
+      ];
 
     useEffect(() => {
         var requestOptions = {
@@ -36,7 +42,8 @@ export default function ProductView() {
                 productName={product.name}
                 productCountChip={false}
                 search={false}
-                path={`Dashboard / Categories / ${category.name} / ${product.name}`}
+                visualPath={`Dashboard / Categories / ${category.name} / ${product.name}`}
+                linkPath={linkPath}
             />
             <main className="relative">
                 <div className="grid grid-cols-3 p-4">

@@ -12,6 +12,11 @@ export default function ProductListView() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const linkPath = [
+    "/dashboard",
+    "/categories",
+    `/categories/${categoryId}/products`
+  ];
 
   const handleSearch = (searchTerm, field) => {
     const filteredResults = products.filter((item) => {
@@ -70,7 +75,8 @@ export default function ProductListView() {
         search={true}
         searchField={'name'}
         onSearch={handleSearch}
-        path={`Dashboard / Categories / ${category.name}`}
+        visualPath={`Dashboard / Categories / ${category.name}`}
+        linkPath={linkPath}
       />
       <main className="relative">
         <Table

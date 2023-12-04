@@ -5,6 +5,10 @@ import CategoryCard from './CategoryCard.jsx';
 export default function CategoriesView() {
   const [categories, setCategories] = useState([]);
   const [filteredCategories, setFilteredCategories] = useState([]);
+  const linkPath = [
+    "/dashboard",
+    "/categories",
+  ];
 
   const handleSearch = (searchTerm, field) => {
     const filteredResults = categories.filter((item) => {
@@ -40,7 +44,9 @@ export default function CategoriesView() {
         search={true} 
         onSearch={handleSearch}
         searchField={'name'}
-        path={"Dashboard / Categories"}/>
+        visualPath={"Dashboard / Categories"}
+        linkPath={linkPath}  
+      />
       <main className="relative">
         <section className="grid grid-cols-4 gap-4 mx-4 mt-2">
         {filteredCategories.length > 0 ? (

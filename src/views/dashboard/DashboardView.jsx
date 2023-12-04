@@ -5,11 +5,15 @@ import { Link } from 'react-router-dom';
 
 export default function DashboardView() {
 
-  const path = "Dashboard";
-
   return (
     <div>
-      <Header viewName={"Dashboard"} productCountChip={false} search={false} path={path}/>
+      <Header 
+        viewName={"Dashboard"}
+        productCountChip={false}
+        search={false} 
+        visualPath={"Dashboard"}
+        linkPath={``}
+      />
       <main className="relative">
         <section className="grid grid-cols-2 gap-8 mx-8 mt-7">
             <Link to="/categories">
