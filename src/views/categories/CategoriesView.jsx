@@ -4,6 +4,17 @@ import CategoryCard from './CategoryCard.jsx';
 
 export default function CategoriesView() {
   const [categories, setCategories] = useState([]);
+  const [filteredCategories, setFilteredCategories] = useState([]);
+
+  const handleSearch = (searchTerm, field) => {
+    const filteredResults = categories.filter((item) => {
+      console.log(item[field]);
+      const fieldValue = item && item[field] ? item[field].toLowerCase() : '';
+      return fieldValue.includes(searchTerm.toLowerCase());
+    });
+  
+    setFilteredCategories(filteredResults);
+  };
 
   function capitalizeFirstLetter(inputString) {
     return inputString.charAt(0).toUpperCase() + inputString.slice(1).toLowerCase();
@@ -23,12 +34,24 @@ export default function CategoriesView() {
 
   return (
     <>
-      <Header viewName={"Categories"} productCountChip={false} search={true} path={"Dashboard / Categories"}/>
+      <Header 
+        viewName={"Categories"} 
+        productCountChip={false} 
+        search={true} 
+        onSearch={handleSearch}
+        searchField={'name'}
+        path={"Dashboard / Categories"}/>
       <main className="relative">
         <section className="grid grid-cols-4 gap-4 mx-4 mt-2">
-          {categories.map(category => (
+        {filteredCategories.length > 0 ? (
+            filteredCategories.map(category => (
               <CategoryCard key={category.id} id={category.id} name={capitalizeFirstLetter(category.name)} />
-          ))}
+            ))
+          ) : (
+            categories.map(category => (
+              <CategoryCard key={category.id} id={category.id} name={capitalizeFirstLetter(category.name)} />
+            ))
+          )}
         </section>
       </main>
     </>

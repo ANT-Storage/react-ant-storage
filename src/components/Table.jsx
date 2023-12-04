@@ -1,16 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Icon } from '@iconify/react';
-
-// TODO: Create a js method to make the table pagination adapt to the screen size
+import SearchBox from './SearchBox';
 
 const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
   const columns = items.length > 0 ? Object.keys(items[0]) : [];
   const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
   const itemsPerPage = 10;
+  const [hiddenField, setHiddenField] = useState('');
 
   const visibleColumns = columns.filter((column) => !hiddenColumns.includes(column));
+
+  useEffect(() => {
+    setCurrentPage(1);
+    setHiddenField(searchTerm);
+  }, [searchTerm]);
 
   function capitalizeFirstLetter(inputString) {
     return inputString.charAt(0).toUpperCase() + inputString.slice(1).toLowerCase();
@@ -18,6 +24,10 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
 
   const handleSortToggle = () => {
     setSortOrder((prevSortOrder) => (prevSortOrder === 'asc' ? 'desc' : 'asc'));
+  };
+
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
   };
 
   const sortedItems = [...items].sort((a, b) => {
@@ -35,18 +45,22 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
     const currentURL = window.location.href;
     const currentPageURL = `${currentURL}/${id}`;
     return currentPageURL;
-  }
+  };
+
+  const filteredItems = sortedItems.filter((item) =>
+    item[linkField].toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = sortedItems.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   const goToNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(prevPage + 1, Math.ceil(sortedItems.length / itemsPerPage)));
+    setCurrentPage((prevPage) => Math.min(prevPage + 1, Math.ceil(filteredItems.length / itemsPerPage)));
   };
 
   const goToPrevPage = () => {
@@ -55,6 +69,7 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
 
   return (
     <div>
+      <input type="hidden" value={hiddenField} />
       <table className="relative overflow-x-auto w-full text-sm text-left rtl:text-right">
         <thead className="text-md bg-[#E39945] text-white">
           <tr className="font-bold">
@@ -97,7 +112,7 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
         </tbody>
       </table>
       <div className="pagination rounded float-right text-center m-2 p-2">
-        <button className={currentPage === 1 ? 'mx-1 text-white' : 'mx-1 text-[#E39945]'} onClick={goToPrevPage} disabled={currentPage === 1}>
+      <button className={currentPage === 1 ? 'mx-1 text-white' : 'mx-1 text-[#E39945]'} onClick={goToPrevPage} disabled={currentPage === 1}>
           <Icon className="relative top-0.5" icon="mingcute:left-fill" width="16" height="16" />
         </button>
         {Array.from({ length: Math.ceil(sortedItems.length / itemsPerPage) }, (_, i) => i + 1).map((pageNumber) => (
@@ -109,7 +124,6 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
           <Icon className="relative top-0.5" icon="mingcute:right-fill" width="16" height="16" />
         </button>
       </div>
-
     </div>
   );
 };

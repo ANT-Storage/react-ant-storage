@@ -6,7 +6,18 @@ import { useParams } from 'react-router-dom';
 function UsersListView() {
 
     const [users, setUsers] = useState([]);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const hiddenColumns = ['id','password'];
+
+    const handleSearch = (searchTerm, field) => {
+      const filteredResults = users.filter((item) => {
+        console.log(item[field]);
+        const fieldValue = item && item[field] ? item[field].toLowerCase() : '';
+        return fieldValue.includes(searchTerm.toLowerCase());
+      });
+    
+      setFilteredUsers(filteredResults);
+    };
 
     useEffect(() => {
       var requestOptions = {
@@ -28,9 +39,19 @@ function UsersListView() {
 
     return (
         <>
-        <Header viewName={"Users"} search={true} path={`Dashboard / Users`}/>
+        <Header 
+          viewName={"Users"} 
+          search={true}
+          searchField={'username'}
+          onSearch={handleSearch} 
+          path={`Dashboard / Users`}/>
         <main className="relative">
-            <Table items={users} hiddenColumns={hiddenColumns} linkField={"username"}/>
+            <Table 
+              items={filteredUsers.length > 0 ? filteredUsers : users}
+              hiddenColumns={hiddenColumns}
+              linkField={'username'}
+              linkFieldEnabled={true}
+            />
         </main>
         </>
     )
