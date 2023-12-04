@@ -9,12 +9,31 @@ export default function ProductView() {
     const { productId, categoryId } = useParams();
     const [category, setCategory] = useState('');
     const [product, setProduct] = useState('');
+    const [productImage, setProductImage] = useState('');
     const linkPath = [
         "/dashboard",
         "/categories",
         `/categories/${categoryId}/products`,
         `/categories/${categoryId}/products/${productId}`
       ];
+
+      const handleDelete = async () => {
+        try {
+      
+          var requestOptions = {
+            method: "DELETE",
+            redirect: "follow",
+          };
+      
+          fetch(`http://localhost:8080/antstorage/v1/products/${productId}`, requestOptions)
+            .then((response) => response.text())
+            .then((result) => console.log(result))
+            .catch((error) => console.log("error", error))
+            .then(window.open(`/categories/${categoryId}/products`))
+        } catch (error) {
+          console.error("Error submitting form:", error);
+        }
+      };
 
     useEffect(() => {
         var requestOptions = {
@@ -30,7 +49,7 @@ export default function ProductView() {
         fetch(`http://localhost:8080/antstorage/v1/products/${productId}`, requestOptions)
           .then(response => response.json())  // Assuming the response is JSON
           .then(result => setProduct(result))
-          .catch(error => console.log('error', error));
+          .catch(error => console.log('error', error))
     
     
       }, []);
@@ -49,9 +68,9 @@ export default function ProductView() {
                 <div className="grid grid-cols-3 p-4">
                     <div className="image text-right col-span-1">
                         <img
-                            src={ProductImage}
+                            src={`http://localhost:8080/antstorage/v1/products/image/${product.barcode}`}
                             alt="Photo"
-                            className="w-auto h-[25em] mx-auto mt-4"
+                            className="w-auto h-[25em] mx-auto mt-4 p-10"
                         />
                     </div>
                     <div className="col-span-2 pr-10">
@@ -65,7 +84,8 @@ export default function ProductView() {
                             <Icon
                                 data-modal-target="default-modal" data-modal-toggle="default-modal"
                                 icon="material-symbols:delete"
-                                className="inline mr-2 w-[2em] h-[2em] p-2 rounded bg-[#DA7526] text-white"
+                                onClick={handleDelete}
+                                className="cursor-pointer inline mr-2 w-[2em] h-[2em] p-2 rounded bg-[#DA7526] text-white"
                             />
                         </div>
 

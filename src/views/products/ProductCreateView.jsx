@@ -90,7 +90,8 @@ export default function ProductCreateView() {
       fetch("http://localhost:8080/antstorage/v1/products", requestOptions)
         .then((response) => response.text())
         .then((result) => console.log(result))
-        .catch((error) => console.log("error", error));
+        .catch((error) => console.log("error", error))
+        .then(window.open(`/categories/${categoryId}/products`))
     } catch (error) {
       console.error("Error submitting form:", error);
     }
