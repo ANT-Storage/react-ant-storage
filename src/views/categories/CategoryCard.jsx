@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 export default function CategoryCard({id, name, image}) {
   return (
     <>  
-        <Link to={`/categories/${name.toLowerCase()}/products`}>
+        <Link to={`/categories/${id}/products`}>
           <div className="card shadow-md rounded-md mt-4 cursor-pointer hover:shadow-xl">
               <img src={categoryImage} alt="" className="rounded-t-md" />
               <div className="card-body p-3">

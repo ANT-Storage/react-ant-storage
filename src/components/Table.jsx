@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react';
 
 // TODO: Create a js method to make the table pagination adapt to the screen size
 
-const Table = ({ items, hiddenColumns, linkField }) => {
+const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
   const columns = items.length > 0 ? Object.keys(items[0]) : [];
   const [sortOrder, setSortOrder] = useState('asc');
   const [currentPage, setCurrentPage] = useState(1);
@@ -83,12 +83,12 @@ const Table = ({ items, hiddenColumns, linkField }) => {
             <tr className={`text-[#929292] border-b ${index % 2 === 0 ? 'bg-[#F9F9F9]' : ''}`} key={index}>
               {visibleColumns.map((column) => (
                 <td className={`px-6 py-2`} key={column}>
-                  {column === linkField ? (
+                  {column === linkField && linkFieldEnabled ? (
                     <Link to={getCurrentLinkFieldPath(item.id)} className="font-bold hover:underline">
-                      {item[column]}
+                      {item[column].length > 60 ? `${item[column].substring(0, 60)}...` : item[column]}
                     </Link>
                   ) : (
-                    item[column]
+                    item[column].length > 60 ? `${item[column].substring(0, 60)}...` : item[column]
                   )}
                 </td>
               ))}

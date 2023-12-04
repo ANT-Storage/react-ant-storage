@@ -30,7 +30,7 @@ export default function DashboardView() {
             />
             </Link>
 
-            <Link to="/audtilog">
+            <Link to="/auditlog">
             <DashboardCard 
                 iconName={"bx:file"}
                 iconColor={"#E8AE61"}

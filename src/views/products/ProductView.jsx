@@ -2,11 +2,12 @@ import { React, useState, useEffect } from 'react';
 import Header from "../../components/Header";
 import ProductImage from "../../assets/images/product-example-img.jpg";
 import { Icon } from "@iconify/react";
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 export default function ProductView() {
-
-    const { productId } = useParams();
+    
+    const { productId, categoryId } = useParams();
+    const [category, setCategory] = useState('');
     const [product, setProduct] = useState('');
 
     useEffect(() => {
@@ -14,6 +15,11 @@ export default function ProductView() {
           method: 'GET',
           redirect: 'follow'
         };
+
+        fetch(`http://localhost:8080/antstorage/v1/categories/${categoryId}`, requestOptions)
+            .then(response => response.json())  // Assuming the response is JSON
+            .then(result => setCategory(result))
+            .catch(error => console.log('error', error));
         
         fetch(`http://localhost:8080/antstorage/v1/products/${productId}`, requestOptions)
           .then(response => response.json())  // Assuming the response is JSON
@@ -30,7 +36,7 @@ export default function ProductView() {
                 productName={product.name}
                 productCountChip={false}
                 search={false}
-                path={`Home / Categories / Sudaderas / ${product.name}`}
+                path={`Dashboard / Categories / ${category.name} / ${product.name}`}
             />
             <main className="relative">
                 <div className="grid grid-cols-3 p-4">
@@ -43,11 +49,14 @@ export default function ProductView() {
                     </div>
                     <div className="col-span-2 pr-10">
                         <div className="action text-right pr-4">
+                            <Link to={`${window.location.href}/edit`}>
+                                <Icon
+                                    icon="material-symbols:edit"
+                                    className="inline mr-2 w-[2em] h-[2em] p-2 rounded bg-[#F0CD97] text-black"
+                                />
+                            </Link>
                             <Icon
-                                icon="material-symbols:edit"
-                                className="inline mr-2 w-[2em] h-[2em] p-2 rounded bg-[#F0CD97] text-white"
-                            />
-                            <Icon
+                                data-modal-target="default-modal" data-modal-toggle="default-modal"
                                 icon="material-symbols:delete"
                                 className="inline mr-2 w-[2em] h-[2em] p-2 rounded bg-[#DA7526] text-white"
                             />

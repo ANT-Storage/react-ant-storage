@@ -5,23 +5,24 @@ import { useAuth } from '../auth/AuthContext.jsx'
 import { Icon } from '@iconify/react'
 import { Link } from 'react-router-dom'
 
-export default function Header({ viewName, productName, productCount, search, path }) {
+export default function Header({ viewName, productName, productCount, search, onSearch, searchField, path}) {
 
   const { user, logout } = useAuth();
 
   let productCountChipContent = "";
   let searchContent = "";
   let navPath = viewName;
+  let newButton = <button></button>;
   
   if(productCount > 0) {
     productCountChipContent = 
-    <span className="bg-[#F0CD97] relative -top-1 text-black text-xs py-2 px-3 mx-2 rounded-full">
+    <span className="bg-[#F0CD97] relative -top-0.5 text-black text-xs py-2 px-3 mx-4 rounded-full">
       {productCount} products
     </span>;
   }
 
   if(search) {
-    searchContent = <SearchBox />;
+    searchContent = <SearchBox field={searchField} onSearch={onSearch} />;
   }
 
   if(productName) {
@@ -58,8 +59,8 @@ export default function Header({ viewName, productName, productCount, search, pa
       <header className="orange-header-gradient z-50">
           <div className="grid grid-cols-2">
             <section className="name-image p-5">
-                <h1 className="text-white font-bold text-2xl">
-                  {viewName} {} {productCountChipContent}
+                <h1 className="text-white font-bold text-2xl flex">
+                  {viewName} {productCountChipContent} 
                 </h1>
             </section>
             <section className="right-side text-end p-5 grid grid-cols-5">
