@@ -67,6 +67,10 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 1));
   };
 
+  const getCreatePath = () => {
+    return window.location.pathname + "/create";
+  };
+
   return (
     <div>
       <input type="hidden" value={hiddenField} />
@@ -111,18 +115,30 @@ const Table = ({ items, hiddenColumns, linkField, linkFieldEnabled }) => {
           ))}
         </tbody>
       </table>
-      <div className="pagination rounded float-right text-center m-2 p-2">
-      <button className={currentPage === 1 ? 'mx-1 text-white' : 'mx-1 text-[#E39945]'} onClick={goToPrevPage} disabled={currentPage === 1}>
-          <Icon className="relative top-0.5" icon="mingcute:left-fill" width="16" height="16" />
-        </button>
-        {Array.from({ length: Math.ceil(sortedItems.length / itemsPerPage) }, (_, i) => i + 1).map((pageNumber) => (
-          <button key={pageNumber} onClick={() => paginate(pageNumber)} className={pageNumber === currentPage ? 'bg-[#E39945] text-white mx-1 py-1 px-2 rounded' : 'mx-1 py-1 px-2'}>
-            {pageNumber}
+      <div className="grid grid-cols-2">
+        <div className="create m-2 px-4">
+          <Link to={getCreatePath()}>
+            <button className="bg-[#E39945] flex align-baseline rounded text-white text-sm py-1.5 px-3">
+            <Icon icon="gridicons:add-outline" width="18" height="18" className="relative mr-1" />
+              Add product
+            </button>
+          </Link>
+        </div>
+        <div className="pagination-section">
+          <div className="pagination rounded float-right text-center m-2">
+          <button className={currentPage === 1 ? 'mx-1 text-white' : 'mx-1 text-[#E39945]'} onClick={goToPrevPage} disabled={currentPage === 1}>
+            <Icon className="relative top-0.5" icon="mingcute:left-fill" width="16" height="16" />
           </button>
-        ))}
-        <button className={currentPage === Math.ceil(sortedItems.length / itemsPerPage) ? 'mx-1 text-white' : 'mx-1 text-[#E39945]'} onClick={goToNextPage} disabled={currentPage === Math.ceil(sortedItems.length / itemsPerPage)}>
-          <Icon className="relative top-0.5" icon="mingcute:right-fill" width="16" height="16" />
-        </button>
+          {Array.from({ length: Math.ceil(sortedItems.length / itemsPerPage) }, (_, i) => i + 1).map((pageNumber) => (
+            <button key={pageNumber} onClick={() => paginate(pageNumber)} className={pageNumber === currentPage ? 'bg-[#E39945] text-white mx-1 py-1 px-2 rounded' : 'mx-1 py-1 px-2'}>
+              {pageNumber}
+            </button>
+          ))}
+          <button className={currentPage === Math.ceil(sortedItems.length / itemsPerPage) ? 'mx-1 text-white' : 'mx-1 text-[#E39945]'} onClick={goToNextPage} disabled={currentPage === Math.ceil(sortedItems.length / itemsPerPage)}>
+            <Icon className="relative top-0.5" icon="mingcute:right-fill" width="16" height="16" />
+          </button>
+        </div>
+        </div>
       </div>
     </div>
   );
