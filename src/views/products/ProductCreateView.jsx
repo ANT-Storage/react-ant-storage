@@ -70,28 +70,45 @@ export default function ProductCreateView() {
 
   const handleFormSubmit = async () => {
     try {
-      // Use the ref to get the selected file
       const selectedFile = fileInputRef.current.files[0];
-  
-      var formdata = new FormData();
-      formdata.append("file", selectedFile);
-      formdata.append("barcode", product.barcode);
-      formdata.append("name", product.name);
-      formdata.append("description", product.description);
-      formdata.append("location", product.location);
-      formdata.append("category_id", product.category_id);
-  
+
+      var imageFormData = new FormData();
+      imageFormData.append("file", selectedFile);
+
       var requestOptions = {
         method: "POST",
-        body: formdata,
+        body: imageFormData,
         redirect: "follow",
       };
-  
-      fetch("http://localhost:8080/antstorage/v1/products", requestOptions)
-        .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.log("error", error))
-        .then(window.open(`/categories/${categoryId}/products`))
+      
+      fetch("http://localhost:8080/antstorage/v1/images", requestOptions)
+        .then((response) => response.json()) // Parse the response as JSON
+        .then((result) => {
+          // Assuming the response is an object with an "id" property
+          var imageId = result.id;
+          var formdata = new FormData();
+          formdata.append("barcode", product.barcode);
+          formdata.append("name", product.name);
+          formdata.append("description", product.description);
+          formdata.append("location", product.location);
+          formdata.append("category_id", product.category_id);
+          formdata.append("date", product.date);
+          formdata.append("image_id", imageId);
+      
+          var requestOptions = {
+            method: "POST",
+            body: formdata,
+            redirect: "follow",
+          };
+      
+          fetch("http://localhost:8080/antstorage/v1/products", requestOptions)
+            .then((response) => response.text())
+            .then((result) => console.log(result))
+            .catch((error) => console.log("error", error))
+            .then(window.open(`/categories/${categoryId}/products`))
+              
+            })
+            .catch((error) => console.log("error", error));
     } catch (error) {
       console.error("Error submitting form:", error);
     }

@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 export default function ProductListView() {
   const { categoryId } = useParams();
-  const hiddenColumns = ['id', 'url_img', 'category_id'];
+  const hiddenColumns = ['id', 'image_id', 'category_id'];
 
   const [category, setCategory] = useState('');
   const [products, setProducts] = useState([]);

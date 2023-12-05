@@ -60,7 +60,12 @@ export default function CategoriesView() {
             ))
           ) : (
             categories.map(category => (
-              <CategoryCard key={category.id} id={category.id} name={capitalizeFirstLetter(category.name)} />
+              <CategoryCard 
+                key={category.id} 
+                id={category.id} 
+                name={capitalizeFirstLetter(category.name)}
+                image_id={category.image_id} 
+              />
             ))
           )}
         </section>

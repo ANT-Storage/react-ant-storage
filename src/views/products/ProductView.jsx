@@ -68,7 +68,7 @@ export default function ProductView() {
                 <div className="grid grid-cols-3 p-4">
                     <div className="image text-right col-span-1">
                         <img
-                            src={`http://localhost:8080/antstorage/v1/products/image/${product.barcode}`}
+                            src={`http://localhost:8080/antstorage/v1/images/media/${product.image_id}`}
                             alt="Photo"
                             className="w-auto h-[25em] mx-auto mt-4 p-10"
                         />
