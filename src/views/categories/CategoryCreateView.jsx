@@ -34,24 +34,25 @@ export default function CategoryCreateView() {
 
     const handleFormSubmit = async () => {
         try {
-          // Use the ref to get the selected file
-          const selectedFile = fileInputRef.current.files[0];
-      
-          var formdata = new FormData();
-          formdata.append("name", category.name);
-          formdata.append("file", selectedFile);
-      
-          var requestOptions = {
-            method: "POST",
-            body: formdata,
-            redirect: "follow",
-          };
-      
-          fetch("http://localhost:8080/antstorage/v1/categories", requestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.log("error", error))
-            //.then(window.open(`/categories/`))
+            // Use the ref to get the selected file
+            const selectedFile = fileInputRef.current.files[0];
+        
+            var formdata = new FormData();
+            formdata.append("file", selectedFile);
+            formdata.append("name", category.name);
+ 
+        
+            var requestOptions = {
+              method: "POST",
+              body: formdata,
+              redirect: "follow",
+            };
+        
+            fetch("http://localhost:8080/antstorage/v1/categories", requestOptions)
+              .then((response) => response.text())
+              .then((result) => console.log(result))
+              .catch((error) => console.log("error", error))
+              .then(window.open(`/categories`))
         } catch (error) {
           console.error("Error submitting form:", error);
         }

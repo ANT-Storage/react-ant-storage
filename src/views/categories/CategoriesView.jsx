@@ -55,7 +55,8 @@ export default function CategoriesView() {
             filteredCategories.map(category => (
               <CategoryCard 
                 key={category.id} 
-                id={category.id}name={capitalizeFirstLetter(category.name)} />
+                id={category.id}name={capitalizeFirstLetter(category.name)} 
+              />
             ))
           ) : (
             categories.map(category => (
