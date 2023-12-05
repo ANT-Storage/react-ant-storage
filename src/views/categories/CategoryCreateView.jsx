@@ -68,6 +68,7 @@ export default function CategoryCreateView() {
           )
             .then((response) => response.text())
             .then((result) => console.log(result))
+            .then(window.history.back())
             .catch((error) => console.log("error", error));
         })
         .catch((error) => console.log("error", error));
