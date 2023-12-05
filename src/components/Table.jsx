@@ -103,7 +103,7 @@ const Table = ({ items, objectName, hiddenColumns, linkField, linkFieldEnabled }
               {visibleColumns.map((column) => (
                 <td className={`px-6 py-2`} key={column}>
                   {column === linkField && linkFieldEnabled ? (
-                    <Link to={getCurrentLinkFieldPath(item.id)} className="font-bold hover:underline">
+                    <Link to={getCurrentLinkFieldPath(item.id)} className="font-bold hover:underline break-words">
                       {item[column].length > 60 ? `${item[column].substring(0, 60)}...` : item[column]}
                     </Link>
                   ) : (

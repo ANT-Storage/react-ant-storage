@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../../components/Header.jsx';
 import CategoryCard from './CategoryCard.jsx';
+import CategoryAddBtn from './CategoryAddBtn.jsx';
 
 export default function CategoriesView() {
   const [categories, setCategories] = useState([]);
@@ -49,6 +50,7 @@ export default function CategoriesView() {
       />
       <main className="relative">
         <section className="grid grid-cols-4 gap-4 mx-4 mt-2">
+        <CategoryAddBtn/>
         {filteredCategories.length > 0 ? (
             filteredCategories.map(category => (
               <CategoryCard 

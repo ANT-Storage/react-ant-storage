@@ -93,7 +93,7 @@ export default function ProductView() {
                         <h2 className="text-[#E39945] font-bold text-3xl">
                             {product.name}
                         </h2>
-                        <p className="text-[#998E8E] text-md w-3/4">
+                        <p className="text-[#998E8E] text-md w-3/4 break-words">
                             {product.description}
                         </p>
 

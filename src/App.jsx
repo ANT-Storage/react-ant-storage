@@ -12,6 +12,7 @@ import AuditLogView from "./views/auditlog/AuditLogView.jsx";
 import ConfigurationView from "./views/configuration/ConfigurationView.jsx";
 import ProductEditView from "./views/products/ProductEditView.jsx";
 import ProductCreateView from "./views/products/ProductCreateView.jsx";
+import CategoryCreateView from "./views/categories/CategoryCreateView.jsx";
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route element={<ProtectedRoutes/>}>
           <Route path="/dashboard" element={<DashboardView />} />
           <Route path="/categories" element={<CategoriesView />} />
+          <Route path="/categories/create" element={<CategoryCreateView />} />
           <Route path="/categories/:categoryId/products" element={<ProductListView />} />
           <Route path="/categories/:categoryId/products/create" element={<ProductCreateView />} />
           <Route path="/categories/:categoryId/products/:productId" element={<ProductView />} />
