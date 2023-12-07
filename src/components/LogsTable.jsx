@@ -87,15 +87,6 @@ export default function LogsTable() {
 
     return (
         <>
-            <div className="filters grid grid-cols-2 px-5 py-2">
-                <section className="left">
-                    
-                </section>
-                <section className="right">
-                    
-                </section>
-            </div>
-
             {error ? (
                 <p>{error}</p>
             ) : (
