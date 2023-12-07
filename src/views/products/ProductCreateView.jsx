@@ -90,6 +90,7 @@ export default function ProductCreateView() {
           formdata.append("barcode", product.barcode);
           formdata.append("name", product.name);
           formdata.append("description", product.description);
+          formdata.append("size", product.size);
           formdata.append("location", product.location);
           formdata.append("category_id", product.category_id);
           formdata.append("date", product.date);
@@ -182,6 +183,22 @@ export default function ProductCreateView() {
                 Tags
               </span>
             </div>
+            <h3 className="mt-4 mb-0 font-bold flex align-baseline">
+                  <Icon
+                      icon="radix-icons:size"
+                      className="relative top-1 mr-2"
+                  />
+                  SIZE
+              </h3>
+              <input
+                className="text-[#998E8E] outline-none"
+                type="text"
+                name=""
+                placeholder="Size"
+                id="name"
+                onChange={(e) => handleInputChange("size", e.target.value)}
+              />
+
             <h3 className="mt-4 mb-0 font-bold flex align-baseline">
               <Icon icon="mdi:location" className="relative top-1 mr-2" />
               FROM

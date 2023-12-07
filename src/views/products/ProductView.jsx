@@ -1,4 +1,4 @@
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useRef } from 'react';
 import Header from "../../components/Header";
 import ProductImage from "../../assets/images/product-example-img.jpg";
 import { Icon } from "@iconify/react";
@@ -15,7 +15,13 @@ export default function ProductView() {
         "/categories",
         `/categories/${categoryId}/products`,
         `/categories/${categoryId}/products/${productId}`
-      ];
+    ];
+    const delteModalRef = useRef(null);
+
+      const toggleModal = () => {
+        const divStyle = delteModalRef.current.style;
+        divStyle.display = divStyle.display === 'none' ? 'block' : 'none';
+      };
 
       const handleDelete = async () => {
         try {
@@ -56,6 +62,22 @@ export default function ProductView() {
 
     return (
         <>
+            <div 
+                ref={delteModalRef}
+                style={{display: "none"}}
+                className="absolute w-full h-full z-[1000] bg-[#000000de] text-[#DA7526] font-bold py-[15em] px-4 text-center"
+            >
+                Are you sure you want to delete this product?
+                <div className="mt-4">
+                    <button onClick={handleDelete} className="bg-[#DA7526] text-white py-1 px-3 rounded mx-4">
+                        Yes
+                    </button>
+                    <button onClick={toggleModal}>
+                        No
+                    </button>
+                </div>
+                
+            </div>
             <Header
                 viewName={"Product"}
                 productName={product.name}
@@ -84,7 +106,7 @@ export default function ProductView() {
                             <Icon
                                 data-modal-target="default-modal" data-modal-toggle="default-modal"
                                 icon="material-symbols:delete"
-                                onClick={handleDelete}
+                                onClick={toggleModal}
                                 className="cursor-pointer inline mr-2 w-[2em] h-[2em] p-2 rounded bg-[#DA7526] text-white"
                             />
                         </div>
@@ -123,7 +145,9 @@ export default function ProductView() {
                             />
                             SIZE
                         </h3>
-                        <p className="text-[#998E8E]">30 x 30 cm</p>
+                        <p className="text-[#998E8E]">
+                            {product.size}
+                        </p>
 
                         <h3 className="mt-4 mb-0 font-bold flex align-baseline">
                             <Icon
