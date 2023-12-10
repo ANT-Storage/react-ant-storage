@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     const responseObject = JSON.parse(userData);
+    console.log(responseObject);
     setUser(responseObject);
   };
 

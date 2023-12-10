@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import { Icon } from "@iconify/react";
+import { useAuth } from '../../auth/AuthContext.jsx'; 
 
 export default function CategoryCreateView() {
   const linkPath = ["/dashboard", "/categories", "/categories/create"];
-
+  const { user } = useAuth();
   const fileInputRef = React.createRef();
 
   const [imageId, setImageId] = useState("");
@@ -31,47 +32,68 @@ export default function CategoryCreateView() {
     }
   };
 
+  const getCurrentDate = () => {
+    var currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1;
+    var day = currentDate.getDate();
+    var hours = currentDate.getHours();
+    var minutes = currentDate.getMinutes();
+    var dateTime = year + "/" + month + "/" + day + " " + hours + ":" + minutes;
+    return dateTime;
+  }
+
+  const log = {
+    "author":user.username,
+    "action":`CREATE - Category: ${category.name}`,
+    "date": getCurrentDate()
+  }
+
   const handleFormSubmit = async () => {
     try {
-      // Use the ref to get the selected file
       const selectedFile = fileInputRef.current.files[0];
-
+  
       var imageFormData = new FormData();
       imageFormData.append("file", selectedFile);
-
+  
       var requestOptions = {
         method: "POST",
         body: imageFormData,
         redirect: "follow",
       };
-
-      fetch("http://localhost:8080/antstorage/v1/images", requestOptions)
-        .then((response) => response.json()) // Parse the response as JSON
-        .then((result) => {
-          // Assuming the response is an object with an "id" property
-          var imageId = result.id;
-
-          // Now you can use imageId in the next fetch
-          var categoryFormData = new FormData();
-          categoryFormData.append("name", category.name);
-          categoryFormData.append("image_id", imageId);
-
-          var requestOptions2 = {
-            method: "POST",
-            body: categoryFormData,
-            redirect: "follow",
-          };
-
-          fetch(
-            "http://localhost:8080/antstorage/v1/categories",
-            requestOptions2
-          )
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .then(window.open(`/categories/`))
-            .catch((error) => console.log("error", error));
-        })
-        .catch((error) => console.log("error", error));
+  
+      const imageResponse = await fetch("http://localhost:8080/antstorage/v1/images", requestOptions);
+      const imageResult = await imageResponse.json();
+      var imageId = imageResult.id;
+  
+      var categoryFormData = new FormData();
+      categoryFormData.append("name", category.name);
+      categoryFormData.append("image_id", imageId);
+  
+      var requestOptions2 = {
+        method: "POST",
+        body: categoryFormData,
+        redirect: "follow",
+      };
+  
+      const categoryResponse = await fetch("http://localhost:8080/antstorage/v1/categories", requestOptions2);
+      const categoryResult = await categoryResponse.text();
+  
+      const logFormData = new FormData();
+      logFormData.append("author", log.author);
+      logFormData.append("action", log.action);
+      logFormData.append("date", log.date);
+  
+      const logResponse = await fetch("http://localhost:8080/antstorage/v1/audit_logs", {
+        method: "POST",
+        body: logFormData,
+        redirect: "follow",
+      });
+  
+      const logResult = await logResponse.text();
+  
+      // Open a new window after all requests have been completed successfully
+      window.open(`/categories/`);
     } catch (error) {
       console.error("Error submitting form:", error);
     }

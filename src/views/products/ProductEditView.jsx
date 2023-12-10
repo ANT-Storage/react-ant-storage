@@ -3,12 +3,13 @@ import Header from "../../components/Header";
 import ProductImage from "../../assets/images/product-example-img.jpg";
 import { Icon } from "@iconify/react";
 import { useParams, Link } from 'react-router-dom';
+import { useAuth } from '../../auth/AuthContext.jsx'; 
 
 export default function ProductEditView() {
   const { productId, categoryId } = useParams();
   const [category, setCategory] = useState('');
   const [product, setProduct] = useState('');
-
+  const { user } = useAuth();
   const linkPath = [
     "/dashboard",
     "/categories",
@@ -17,6 +18,23 @@ export default function ProductEditView() {
   ];
 
   const fileInputRef = React.createRef();
+
+  const getCurrentDate = () => {
+    var currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1;
+    var day = currentDate.getDate();
+    var hours = currentDate.getHours();
+    var minutes = currentDate.getMinutes();
+    var dateTime = year + "/" + month + "/" + day + " " + hours + ":" + minutes;
+    return dateTime;
+  }
+
+  const log = {
+    "author":user.username,
+    "action":`EDIT - Product: ${product.name}`,
+    "date": getCurrentDate()
+  }
 
   useEffect(() => {
     var requestOptions = {
@@ -33,10 +51,24 @@ export default function ProductEditView() {
       .then(response => response.json())  // Assuming the response is JSON
       .then(result => setProduct(result))
       .catch(error => console.log('error', error))
-
+    
 
   }, []);
 
+  async function fetchLog() {
+    const logFormData = new FormData();
+      logFormData.append("author", log.author);
+      logFormData.append("action", log.action);
+      logFormData.append("date", log.date);
+  
+      const logResponse = await fetch("http://localhost:8080/antstorage/v1/audit_logs", {
+        method: "POST",
+        body: logFormData,
+        redirect: "follow",
+      });
+  
+      const logResult = await logResponse.text();
+  }
 
   function goToPreviousPage() {
     window.history.go(-1);
@@ -87,6 +119,7 @@ export default function ProductEditView() {
             .then((response) => response.text())
             .then((result) => console.log(result))
             .catch((error) => console.log("error", error))
+            .then(() => {fetchLog();})
             .then(window.open(`/categories/${categoryId}/products`))
             .catch((error) => console.log("error", error));
       } else {
@@ -110,6 +143,7 @@ export default function ProductEditView() {
             .then((response) => response.text())
             .then((result) => console.log(result))
             .catch((error) => console.log("error", error))
+            .then(() => {fetchLog();})
             .then(window.open(`/categories/${categoryId}/products`))
       }} catch (error) {
       console.error("Error submitting form:", error);

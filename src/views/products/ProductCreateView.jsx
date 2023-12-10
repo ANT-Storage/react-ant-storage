@@ -3,10 +3,12 @@ import { useParams } from "react-router-dom";
 import Header from "../../components/Header";
 import { Icon } from "@iconify/react";
 import ProductImage from "../../assets/images/defaultProductImage.png";
+import { useAuth } from '../../auth/AuthContext.jsx'; 
 
 export default function ProductCreateView() {
   const { categoryId } = useParams();
   const [category, setCategory] = useState("");
+  const { user } = useAuth();
   const linkPath = [
     "/dashboard",
     "/categories",
@@ -24,6 +26,23 @@ export default function ProductCreateView() {
     category_id: categoryId,
     url_img: ""
   });
+
+  const getCurrentDate = () => {
+    var currentDate = new Date();
+    var year = currentDate.getFullYear();
+    var month = currentDate.getMonth() + 1;
+    var day = currentDate.getDate();
+    var hours = currentDate.getHours();
+    var minutes = currentDate.getMinutes();
+    var dateTime = year + "/" + month + "/" + day + " " + hours + ":" + minutes;
+    return dateTime;
+  }
+
+  const log = {
+    "author":user.username,
+    "action":`CREATE - Product: ${product.name}`,
+    "date": getCurrentDate()
+  }
 
   const descPlaceholder =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
@@ -71,49 +90,56 @@ export default function ProductCreateView() {
   const handleFormSubmit = async () => {
     try {
       const selectedFile = fileInputRef.current.files[0];
-
-      var imageFormData = new FormData();
+      const imageFormData = new FormData();
       imageFormData.append("file", selectedFile);
-
-      var requestOptions = {
+  
+      const imageResponse = await fetch("http://localhost:8080/antstorage/v1/images", {
         method: "POST",
         body: imageFormData,
         redirect: "follow",
-      };
-      
-      fetch("http://localhost:8080/antstorage/v1/images", requestOptions)
-        .then((response) => response.json()) // Parse the response as JSON
-        .then((result) => {
-          // Assuming the response is an object with an "id" property
-          var imageId = result.id;
-          var formdata = new FormData();
-          formdata.append("barcode", product.barcode);
-          formdata.append("name", product.name);
-          formdata.append("description", product.description);
-          formdata.append("size", product.size);
-          formdata.append("location", product.location);
-          formdata.append("category_id", product.category_id);
-          formdata.append("date", product.date);
-          formdata.append("image_id", imageId);
-      
-          var requestOptions = {
-            method: "POST",
-            body: formdata,
-            redirect: "follow",
-          };
-      
-          fetch("http://localhost:8080/antstorage/v1/products", requestOptions)
-            .then((response) => response.text())
-            .then((result) => console.log(result))
-            .catch((error) => console.log("error", error))
-            .then(window.open(`/categories/${categoryId}/products`))
-              
-            })
-            .catch((error) => console.log("error", error));
+      });
+  
+      const imageResult = await imageResponse.json();
+      const imageId = imageResult.id;
+  
+      const productFormData = new FormData();
+      productFormData.append("barcode", product.barcode);
+      productFormData.append("name", product.name);
+      productFormData.append("description", product.description);
+      productFormData.append("size", product.size);
+      productFormData.append("location", product.location);
+      productFormData.append("category_id", product.category_id);
+      productFormData.append("date", product.date);
+      productFormData.append("image_id", imageId);
+  
+      const productResponse = await fetch("http://localhost:8080/antstorage/v1/products", {
+        method: "POST",
+        body: productFormData,
+        redirect: "follow",
+      });
+  
+      const productResult = await productResponse.text();
+  
+      const logFormData = new FormData();
+      logFormData.append("author", log.author);
+      logFormData.append("action", log.action);
+      logFormData.append("date", log.date);
+  
+      const logResponse = await fetch("http://localhost:8080/antstorage/v1/audit_logs", {
+        method: "POST",
+        body: logFormData,
+        redirect: "follow",
+      });
+  
+      const logResult = await logResponse.text();
+  
+      // Open a new window after all requests have been completed successfully
+      window.open(`/categories/${categoryId}/products`);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
   };
+  
   
 
   return (
@@ -227,4 +253,5 @@ export default function ProductCreateView() {
       </main>
     </div>
   );
-}
+    
+  };
