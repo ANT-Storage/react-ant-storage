@@ -50,7 +50,6 @@ export default function CategoriesView() {
       />
       <main className="relative">
         <section className="grid grid-cols-4 gap-4 mx-4 mt-2">
-        <CategoryAddBtn/>
         {filteredCategories.length > 0 ? (
             filteredCategories.map(category => (
               <CategoryCard 
@@ -68,6 +67,7 @@ export default function CategoriesView() {
               />
             ))
           )}
+          <CategoryAddBtn/>
         </section>
       </main>
     </>

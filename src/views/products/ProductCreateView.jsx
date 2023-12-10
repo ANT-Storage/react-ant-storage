@@ -132,9 +132,8 @@ export default function ProductCreateView() {
       });
   
       const logResult = await logResponse.text();
-  
-      // Open a new window after all requests have been completed successfully
-      window.open(`/categories/${categoryId}/products`);
+
+      window.location.assign(`/categories/${categoryId}/products`);
     } catch (error) {
       console.error("Error submitting form:", error);
     }

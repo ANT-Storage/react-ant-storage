@@ -119,7 +119,6 @@ export default function ProductEditView() {
             .then((response) => response.text())
             .then((result) => console.log(result))
             .catch((error) => console.log("error", error))
-            .then(() => {fetchLog();})
             .then(window.open(`/categories/${categoryId}/products`))
             .catch((error) => console.log("error", error));
       } else {
@@ -143,9 +142,10 @@ export default function ProductEditView() {
             .then((response) => response.text())
             .then((result) => console.log(result))
             .catch((error) => console.log("error", error))
-            .then(() => {fetchLog();})
-            .then(window.open(`/categories/${categoryId}/products`))
-      }} catch (error) {
+            .then(window.location.assign(`/categories/${categoryId}/products`))
+      }
+      fetchLog();
+    } catch (error) {
       console.error("Error submitting form:", error);
     }
   };

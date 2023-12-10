@@ -93,7 +93,7 @@ export default function CategoryCreateView() {
       const logResult = await logResponse.text();
   
       // Open a new window after all requests have been completed successfully
-      window.open(`/categories/`);
+      window.location.assign(`/categories/`);
     } catch (error) {
       console.error("Error submitting form:", error);
     }
