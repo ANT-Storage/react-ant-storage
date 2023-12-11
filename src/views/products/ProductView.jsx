@@ -11,6 +11,8 @@ export default function ProductView() {
     const [category, setCategory] = useState('');
     const [product, setProduct] = useState('');
     const { user } = useAuth();
+    const [tags, setTags] = useState([]);
+    const [tagsContent, setTagsContent] = useState([]);
     const [productImage, setProductImage] = useState('');
     const linkPath = [
         "/dashboard",
@@ -79,6 +81,43 @@ export default function ProductView() {
         .then(console.log(logResult));
     }
 
+    async function getTagNames(tags) {
+        tags = tags.filter(tagProduct => tagProduct.product_id == productId);
+        try {
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+              };
+
+            const results = await Promise.all(
+                tags.map(async (tag) => {
+                    console.log(tag);
+                    const response = await fetch(`http://localhost:8080/antstorage/v1/tags/${tag.tags_id}`, requestOptions);
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch tag ${tag.id}`);
+                    }
+                    return response.json();
+                })
+            );
+            // Update state after all fetch operations complete
+            setTagsContent((prevItems) => [...prevItems, ...results]);
+        } catch (error) {
+            console.error('Error fetching tag names:', error);
+        }
+    }
+
+    const getUniqueByProperty = (arr, prop) => {
+        const seen = new Set();
+        return arr.filter(obj => {
+          const value = obj[prop];
+          if (seen.has(value)) {
+            return false;
+          }
+          seen.add(value);
+          return true;
+        });
+      };
+
     useEffect(() => {
         var requestOptions = {
           method: 'GET',
@@ -94,8 +133,12 @@ export default function ProductView() {
           .then(response => response.json())  // Assuming the response is JSON
           .then(result => setProduct(result))
           .catch(error => console.log('error', error))
-    
-    
+        
+        fetch("http://localhost:8080/antstorage/v1/tags_products", requestOptions)
+          .then(response => response.json())
+          .then(result => {
+            getTagNames(result);
+          })
       }, []);
 
     return (
@@ -165,15 +208,13 @@ export default function ProductView() {
                             TAGS
                         </h3>
                         <div className="tags">
-                            <span className="text-[#6D6D6D] border-2 border-[#F0CD97] py-1 px-3 rounded-full mr-2 text-sm">
-                                Sport
-                            </span>
-                            <span className="text-[#6D6D6D] border-2 border-[#F0CD97] py-1 px-3 rounded-full mr-2 text-sm">
-                                Sport
-                            </span>
-                            <span className="text-[#6D6D6D] border-2 border-[#F0CD97] py-1 px-3 rounded-full mr-2 text-sm">
-                                Sport
-                            </span>
+                        {
+                            getUniqueByProperty(tagsContent, 'name').map((tag) => (
+                                <span className="font-bold border-2 border-black text-sm px-2 py-1 rounded-full mx-1" key={tag.id}>       
+                                    {tag.name} 
+                                </span>
+                            ))
+                        }
                         </div>
 
                         <h3 className="mt-4 mb-0 font-bold flex align-baseline">

@@ -8,12 +8,16 @@ import { useAuth } from '../../auth/AuthContext.jsx';
 export default function ProductCreateView() {
   const { categoryId } = useParams();
   const [category, setCategory] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
   const { user } = useAuth();
   const linkPath = [
     "/dashboard",
     "/categories",
     `/categories/${categoryId}/products`,
   ];
+  const [tagNameField, setTagNameField] = useState("");
+  const [tags, setTags] = useState([]);
+  const [tagsContent, setTagsContent] = useState('');
 
   const fileInputRef = React.createRef();
 
@@ -44,6 +48,21 @@ export default function ProductCreateView() {
     "date": getCurrentDate()
   }
 
+  const handleTagNameFieldChange = (event) => {
+    setTagNameField(event.target.value);
+    console.log(tags)
+  };
+
+  const addTag = () => {
+    const newTag =`<span class="font-bold border-2 border-black text-sm px-2 py-1 rounded-full mx-1">${tagNameField}</span>`;
+    if(!tagNameField == "") {
+      setTags((prevItems) => [...prevItems, tagNameField]);
+      setTagsContent(prevContent => prevContent + newTag);
+      setTagNameField("");
+      
+    }
+  }
+
   const descPlaceholder =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
 
@@ -53,6 +72,60 @@ export default function ProductCreateView() {
     );
     return response.json();
   };
+
+  const handleImageChange = (fileType,file) => {
+    handleInputChange(fileType,file);
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setSelectedImage(null);
+    }
+  };
+
+  async function createTag(tagName,productId) {
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow'
+    };
+
+    fetch(`http://localhost:8080/antstorage/v1/tags?name=${tagName}`, requestOptions)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(result => {
+        createProductTag(result.id, productId);
+
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+  async function createProductTag(tagId,productId) {
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow'
+    };
+    
+    fetch(`http://localhost:8080/antstorage/v1/tags_products?tags_id=${tagId}&product_id=${productId}`, requestOptions)
+      .then(response => response.json())
+      .then(result => console.log(result))
+      .catch(error => console.log('error', error));
+  }
+
+  async function generateTags(productId) {
+    tags.map((tag) => {
+      createTag(tag,productId);
+    })
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -73,7 +146,9 @@ export default function ProductCreateView() {
     window.history.go(-1);
   }
 
+
   const handleInputChange = (fieldName, value) => {
+
     if (fieldName === 'file') {
       setProduct((prevProduct) => ({
         ...prevProduct,
@@ -116,9 +191,10 @@ export default function ProductCreateView() {
         method: "POST",
         body: productFormData,
         redirect: "follow",
-      });
+      })
   
-      const productResult = await productResponse.text();
+      const productResult = await productResponse.json();
+      generateTags(productResult.id);
   
       const logFormData = new FormData();
       logFormData.append("author", log.author);
@@ -131,7 +207,7 @@ export default function ProductCreateView() {
         redirect: "follow",
       });
   
-      const logResult = await logResponse.text();
+      const logResult = await logResponse.json();
 
       window.location.assign(`/categories/${categoryId}/products`);
     } catch (error) {
@@ -152,18 +228,20 @@ export default function ProductCreateView() {
       <main className="relative">
         <div className="grid grid-cols-3 p-4">
           <div className="image text-right col-span-1">
+          {selectedImage ? (
             <img
-              src={ProductImage}
+              src={selectedImage}
               alt="Photo"
               disabled={true}
               className="w-auto h-[25em] mx-auto mt-4 p-10"
-            />
+            />) : (<></>)}
             <input
+              className="float-left"
               type="file"
               name="file"
               id=""
               ref={fileInputRef}
-              onChange={(e) => handleInputChange("file", e.target.files[0])}
+              onChange={(e) => handleImageChange("file", e.target.files[0])}
             />
           </div>
           <div className="col-span-2 pr-10">
@@ -199,14 +277,25 @@ export default function ProductCreateView() {
               autoCorrect={"off"}
               onChange={(e) => handleInputChange("description", e.target.value)}
             />
-            <h3 className="mt-4 mb-2 font-bold flex align-baseline">
+            <h3 className="mt-4 font-bold flex align-baseline">
               <Icon icon="mdi:tags" className="relative top-1 mr-2" />
               TAGS
             </h3>
+            <p className="text-gray-400 text-sm mb-2">Search for existing tags o create new ones</p>
             <div className="tags">
-              <span className="text-[#998E8E] border-2 border-[#998E8E] py-1 px-3 rounded-full mr-2 text-sm">
-                Tags
-              </span>
+              <input
+                type="text"
+                className="border border-gray-400 outline-none rounded px-1"
+                placeholder="Tag name"
+                value={tagNameField}
+                onChange={handleTagNameFieldChange}
+              />
+              <button onClick={addTag} className="mx-2 bg-gray-400 px-2 py-[0.18em] rounded text-white text-sm">
+                Add
+              </button>
+              <div className="mt-2" dangerouslySetInnerHTML={{ __html: tagsContent }}>
+                
+              </div>
             </div>
             <h3 className="mt-4 mb-0 font-bold flex align-baseline">
                   <Icon
