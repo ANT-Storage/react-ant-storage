@@ -24,11 +24,12 @@ export default function LoginView() {
       };
       
       fetch(`http://localhost:8080/antstorage/v1/users/login?username=${username}&password=${password}`, requestOptions)
-        .then(response => response.text())
+        .then(response => response.json())
         .then(result => {
-          console.log(result);
-          login(result);
-          navigate('/dashboard', { replace: true });
+          const loginResult = login(result);
+          if(loginResult == "error") {
+            setError("Invalid user credentials.")
+          }
         })
         .catch(error => console.log('error', error));
     } catch (error) {

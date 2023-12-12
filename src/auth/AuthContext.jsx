@@ -15,9 +15,13 @@ export const AuthProvider = ({ children }) => {
   }, [user]);
 
   const login = (userData) => {
-    const responseObject = JSON.parse(userData);
-    console.log(responseObject);
-    setUser(responseObject);
+    // Check if userData is an object and has the expected properties
+    if (userData && userData.status === "success" && userData.username) {
+      console.log(userData.username);
+      setUser(userData); // Set the entire user object
+    } else {
+      return "error";
+    }
   };
 
   const logout = () => {

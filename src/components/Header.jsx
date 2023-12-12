@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import warehouseImage from "../assets/images/warehouse_img.jpg"
 import SearchBox from './SearchBox'
 import { useAuth } from '../auth/AuthContext.jsx'
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom'
 export default function Header({ viewName, productName, productCount, search, onSearch, searchField, visualPath, linkPath}) {
 
   const { user, logout } = useAuth();
+  const [isProfileVisible, setIsProfileVisible] = useState(false);
 
   let productCountChipContent = "";
   let searchContent = "";
@@ -42,6 +43,19 @@ export default function Header({ viewName, productName, productCount, search, on
     ));
   }
 
+  const createUserButton = () => {
+    let firstLetter = user.username.charAt(0).toUpperCase();
+    return(
+      <button onClick={toggleProfileVisibility} className="bg-[#F0CD97] relative -mt-2 top-[5px] px-2.5 py-0.5 rounded-full mr-2 text-xl text-black">
+        {firstLetter}
+      </button>
+    );
+  }
+
+  const toggleProfileVisibility = () => {
+    setIsProfileVisible((prevVisibility) => !prevVisibility);
+  };
+
   return (
     <>
       <div style={{backgroundImage: `url(${warehouseImage})`}} className="relative header-bg-image z-0"></div>
@@ -52,14 +66,27 @@ export default function Header({ viewName, productName, productCount, search, on
                   {viewName} {productCountChipContent} 
                 </h1>
             </section>
-            <section className="right-side text-end p-5 grid grid-cols-5">
-              <div className="search col-span-4">
+            <section className="right-side text-end p-5 grid grid-cols-11">
+              <div className="search col-span-10">
                 {searchContent}
               </div>
               <div className="profile px-2 py-1">
                 <p className="flex float-right cursor-default">
-                  {user ? user.username : 'Username'}
-                  <Icon className="cursor-pointer relative top-1 ml-2" onClick={logout} icon="material-symbols:logout" />  
+                  {createUserButton()}
+                  <div style={{ display: isProfileVisible ? 'block' : 'none' }} className="profile absolute top-[4em] right-[2em] w-[200px] h-[80px] rounded py-2 px-3 bg-[#FDF7ED] shadow-2xl text-left">
+                    <p className="mb-2 font-bold flex text-center items-center">{user.username == "admin" ? 
+                      <span className="flex items-center mr-1 text-md w-full bg-black border border-black rounded text-white px-1">
+                        <Icon className="mr-1" icon="clarity:administrator-solid" /> {user.username}
+                      </span>
+                        : 
+                        <span className="flex items-center mr-1 text-md w-full shadow-lg bg-white border border-black rounded text-black px-1">
+                          <Icon className="mr-1" icon="mdi:user" /> {user.username}
+                        </span>
+                    } </p>
+                    <button onClick={logout} className="bg-orange-400 w-full p-1 text-black items-center px-2 rounded inline-flex">
+                      <Icon className="mr-1" icon="material-symbols:logout" /> Logout
+                    </button>
+                  </div>
                 </p>         
               </div>
               

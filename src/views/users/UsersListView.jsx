@@ -57,7 +57,7 @@ function UsersListView() {
               objectName={"user"}
               hiddenColumns={hiddenColumns}
               linkField={'username'}
-              linkFieldEnabled={true}
+              linkFieldEnabled={false}
             />
         </main>
         </>
