@@ -1,8 +1,25 @@
-# React + Vite
+<img src='https://avatars.githubusercontent.com/u/151515294?s=400&u=570f52636070e373f5c3a66128f54019cba681b0&v=4' width='100'>  
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+# React App
 
-Currently, two official plugins are available:
+Web app used to organize your own warehouse. Built using: Vite, React, Tailwind CSS, Javascript & CSS  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Status
+This project was developed for learning purposes on the bootcamp Enfoca't (Fundació Esplai)
+
+## Screenshots
+<img src='https://i.imgur.com/uGmzby7.png' width='500'> <img src='https://i.imgur.com/Q7tqJHm.png' width='500'>  
+<img src='https://i.imgur.com/4qDp9eS.png' width='500'> <img src='https://i.imgur.com/xYjeIgh.png' width='500'>  
+
+## Setup
+ - Install dependencies: 
+ ```npm install```  
+ 
+ - Startup: 
+ ```npm run dev```  
+
+ - Build: 
+ ```npm run build```  
+
+ - Deploy: 
+ ```npm run deploy``` 
